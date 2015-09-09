@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="Bernard" verbose="0">
+    <test name="Bernard" preserve-order="true">
+        <classes>
+            <class name="api.ApiTests" />
+        </classes>
+    </test>
+</suite>
+
+

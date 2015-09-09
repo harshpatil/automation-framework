@@ -1,0 +1,11 @@
+package model.response;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: harshavardhan.p
+ * Date: 10/09/15
+ * Time: 12:44 AM
+ * To change this template use File | Settings | File Templates.
+ */
+public class CreateAccountResponse {
+}
