@@ -1,6 +1,7 @@
 package model.request;
 
 import lombok.Data;
+import lombok.Setter;
 import lombok.experimental.Builder;
 
 /**
@@ -33,7 +34,7 @@ public class CreateAccountRequest {
         this.dateOfBirth = 582012328000l;
     }
 
-    public CreateAccountRequest(String firstName, String lastName, int mobile, String address, String emailId, Gender gender, double dateOfBirth){
+    public CreateAccountRequest(String firstName, String lastName, double mobile, String address, String emailId, Gender gender, double dateOfBirth){
 
         this.firstName = firstName;
         this.lastName = lastName;
