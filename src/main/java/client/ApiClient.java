@@ -3,6 +3,7 @@ package client;
 import com.ning.http.client.Response;
 import com.sun.jersey.api.client.ClientResponse;
 import model.request.CreateAccountRequest;
+import model.request.UpdateAccountDetailRequest;
 import utility.HeaderClass;
 import utility.RestTestClient;
 import utility.Setup;
@@ -27,6 +28,32 @@ public class ApiClient extends Setup {
         String body = objectMapper.writeValueAsString(createAccountRequest);
         System.out.println("Request Body ::: "+ body);
         Response response = restTestClient.postMethod(url, body);
+        return response;
+    }
+
+    public Response getUserDetails(String userId) throws Exception {
+
+        String url = "http://localhost:80/socialNetwork/userId/"+ userId;
+        HashMap<String, String> headers = HeaderClass.defaultHeader();
+        Response response = restTestClient.getMethod(url);
+        return response;
+    }
+
+    public Response updateAccountDetails(String userId, UpdateAccountDetailRequest updateAccountDetailRequest) throws Exception {
+
+        String url = "http://localhost:80/socialNetwork/userId/"+ userId + "/updateAccount";
+        HashMap<String, String> headers = HeaderClass.defaultHeader();
+        String body = objectMapper.writeValueAsString(updateAccountDetailRequest);
+        System.out.println("Request Body ::: "+ body);
+        Response response = restTestClient.putMethod(url, body);
+        return response;
+    }
+
+    public Response getUsersList() throws Exception {
+
+        String url = "http://localhost:80/socialNetwork/users";
+        HashMap<String, String> headers = HeaderClass.defaultHeader();
+        Response response = restTestClient.getMethod(url);
         return response;
     }
 }

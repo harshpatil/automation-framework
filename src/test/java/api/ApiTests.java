@@ -1,14 +1,20 @@
 package api;
 
 import client.ApiClient;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ning.http.client.Response;
 import com.sun.jersey.api.client.ClientResponse;
 import model.request.CreateAccountRequest;
 import model.request.Gender;
+import model.request.UpdateAccountDetailRequest;
 import model.response.CreateAccountResponse;
+import model.response.GetUserDetails;
+import model.response.UpdateAccountDetailsResponse;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -55,5 +61,147 @@ public class ApiTests extends ApiClient {
         Assert.assertEquals(createAccountResponse.getGender(), gender);
         Assert.assertNotNull(createAccountResponse.getUserId());
     }
+
+    @Test()
+    public void test_Get_UserDetails() throws Exception {
+
+        String firstName = "abc";
+        String lastName = "xyz";
+        double mobileNumber = 9765148726l;
+        double birthDate = 582012328000l;
+        String address = "#123, ABC, Mumbai";
+        String emailId = "patil.bmsce@gmail.com";
+        Gender gender = Gender.FEMALE;
+
+        // Create request body
+        CreateAccountRequest createAccountRequest = new CreateAccountRequest();
+        createAccountRequest.setFirstName(firstName);
+        createAccountRequest.setLastName(lastName);
+        createAccountRequest.setMobile(mobileNumber);
+        createAccountRequest.setDateOfBirth(birthDate);
+        createAccountRequest.setAddress(address);
+        createAccountRequest.setEmailId(emailId);
+        createAccountRequest.setGender(gender);
+
+        // Make rest call to create account
+        Response createResponse = createAccount(createAccountRequest);
+        Assert.assertEquals(createResponse.getStatusCode(), 201);
+        CreateAccountResponse createAccountResponse = new ObjectMapper().readValue(createResponse.getResponseBody(), CreateAccountResponse.class);
+
+        String userId = createAccountResponse.getUserId();
+
+        // Rest call to get user details
+        Response getUser = getUserDetails(userId);
+        Assert.assertEquals(getUser.getStatusCode(), 200);
+        GetUserDetails getUserDetails = new ObjectMapper().readValue(getUser.getResponseBody(), GetUserDetails.class);
+
+        // Validate response
+        Assert.assertEquals(getUserDetails.getFirstName(), firstName);
+        Assert.assertEquals(getUserDetails.getLastName(), lastName);
+        Assert.assertEquals(getUserDetails.getMobile(), mobileNumber);
+        Assert.assertEquals(getUserDetails.getDateOfBirth(), birthDate);
+        Assert.assertEquals(getUserDetails.getAddress(), address);
+        Assert.assertEquals(getUserDetails.getEmailId(), emailId);
+        Assert.assertEquals(getUserDetails.getGender(), gender);
+        Assert.assertNotNull(getUserDetails.getUserId());
+    }
+
+    @Test()
+    public void test_Edit_UserDetails() throws Exception {
+
+        String firstName = "MNO";
+        String lastName = "QWE";
+        double mobileNumber = 9765148726l;
+        double birthDate = 582012328000l;
+        String address = "#123, ABC, Delhi";
+        String emailId = "patil.bmsce@gmail.com";
+        Gender gender = Gender.FEMALE;
+
+        // Create request body
+        CreateAccountRequest createAccountRequest = new CreateAccountRequest();
+        createAccountRequest.setFirstName(firstName);
+        createAccountRequest.setLastName(lastName);
+        createAccountRequest.setMobile(mobileNumber);
+        createAccountRequest.setDateOfBirth(birthDate);
+        createAccountRequest.setAddress(address);
+        createAccountRequest.setEmailId(emailId);
+        createAccountRequest.setGender(gender);
+
+        // Make rest call to create account
+        Response createResponse = createAccount(createAccountRequest);
+        Assert.assertEquals(createResponse.getStatusCode(), 201);
+        CreateAccountResponse createAccountResponse = new ObjectMapper().readValue(createResponse.getResponseBody(), CreateAccountResponse.class);
+
+        String userId = createAccountResponse.getUserId();
+
+        // Get details and validate
+        Response getUser = getUserDetails(userId);
+        Assert.assertEquals(getUser.getStatusCode(), 200);
+        GetUserDetails getUserDetails = new ObjectMapper().readValue(getUser.getResponseBody(), GetUserDetails.class);
+
+        // Validate response
+        Assert.assertEquals(getUserDetails.getLastName(), lastName);
+        Assert.assertEquals(getUserDetails.getMobile(), mobileNumber);
+
+        // Set New values
+        double newMobileNumber = 8888346573l;
+        String newAddress = "#111, 5th Cross, Kolkata";
+
+        UpdateAccountDetailRequest updateAccountDetailRequest = new UpdateAccountDetailRequest();
+        updateAccountDetailRequest.setMobile(newMobileNumber);
+        updateAccountDetailRequest.setAddress(newAddress);
+
+        // Rest call to update details
+        Response updateResponse = updateAccountDetails(userId, updateAccountDetailRequest);
+        Assert.assertEquals(updateResponse.getStatusCode(), 200);
+        UpdateAccountDetailsResponse updateAccountDetailsResponse = new ObjectMapper().readValue(updateResponse.getResponseBody(), UpdateAccountDetailsResponse.class);
+
+        // Do get call and validate response
+        getUser = getUserDetails(userId);
+        Assert.assertEquals(getUser.getStatusCode(), 200);
+        getUserDetails = new ObjectMapper().readValue(getUser.getResponseBody(), GetUserDetails.class);
+        Assert.assertEquals(getUserDetails.getMobile(), newMobileNumber);
+        Assert.assertEquals(getUserDetails.getAddress(), newAddress);
+        Assert.assertEquals(getUserDetails.getFirstName(), firstName);
+    }
+
+    @Test()
+    public void test_Get_List_Of_Users() throws Exception {
+
+        String firstName = "abc";
+        String lastName = "xyz";
+        double mobileNumber = 9765148726l;
+        double birthDate = 582012328000l;
+        String address = "#123, ABC, Mumbai";
+        String emailId = "patil.bmsce@gmail.com";
+        Gender gender = Gender.FEMALE;
+
+        // Create request body
+        CreateAccountRequest createAccountRequest = new CreateAccountRequest();
+        createAccountRequest.setFirstName(firstName);
+        createAccountRequest.setLastName(lastName);
+        createAccountRequest.setMobile(mobileNumber);
+        createAccountRequest.setDateOfBirth(birthDate);
+        createAccountRequest.setAddress(address);
+        createAccountRequest.setEmailId(emailId);
+        createAccountRequest.setGender(gender);
+
+        // Make rest call to create account
+        Response createResponse = createAccount(createAccountRequest);
+        Assert.assertEquals(createResponse.getStatusCode(), 201);
+        CreateAccountResponse createAccountResponse = new ObjectMapper().readValue(createResponse.getResponseBody(), CreateAccountResponse.class);
+
+        // Rest call to get list of Users
+        Response getUsers = getUsersList();
+        Assert.assertEquals(getUsers.getStatusCode(), 200);
+        List<GetUserDetails> getUserDetailsList = new ObjectMapper().readValue(getUsers.getResponseBody(), new TypeReference<List<GetUserDetails>>() {});
+
+        // Validate response
+        Assert.assertEquals(getUserDetailsList.get(0).getFirstName(), firstName);
+        Assert.assertEquals(getUserDetailsList.get(0).getLastName(), lastName);
+        Assert.assertEquals(getUserDetailsList.get(0).getUserId(), createAccountResponse.getUserId());
+        Assert.assertNotNull(getUserDetailsList.get(1));
+    }
+
 
 }

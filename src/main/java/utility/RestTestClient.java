@@ -24,7 +24,7 @@ public class RestTestClient {
         Response response = null;
         System.out.println("Http request URL ::: " + requestURL);
         response = (Response)webResource.type(MediaType.APPLICATION_JSON_TYPE).post(Response.class, body);
-        System.out.println("Http call response code ::: " + response.getStatusCode());
+        System.out.println("Http response code ::: " + response.getStatusCode());
         return response;
     }
 
@@ -49,7 +49,7 @@ public class RestTestClient {
         Response response = null;
         System.out.println("Http request URL ::: " + requestURL);
         response = (Response)webResource.type(MediaType.APPLICATION_JSON_TYPE).get(Response.class);
-        System.out.println("Http call response code ::: " + response.getStatusCode());
+        System.out.println("Http response code ::: " + response.getStatusCode());
         return response;
     }
 
