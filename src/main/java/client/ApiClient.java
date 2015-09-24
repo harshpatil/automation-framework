@@ -56,4 +56,13 @@ public class ApiClient extends Setup {
         Response response = restTestClient.getMethod(url);
         return response;
     }
+
+    public Response getAllUsers(int pageNo, int pageSize) throws Exception {
+
+        String url = "http://localhost:80/socialNetwork/allusers?pageNo=" + pageNo + "&pageSize=" + pageSize;
+        HashMap<String, String> headers = HeaderClass.defaultHeader();
+        Response response = restTestClient.getMethod(url);
+        return response;
+    }
+
 }

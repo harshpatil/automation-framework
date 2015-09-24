@@ -9,6 +9,7 @@ import model.request.CreateAccountRequest;
 import model.request.Gender;
 import model.request.UpdateAccountDetailRequest;
 import model.response.CreateAccountResponse;
+import model.response.GetAllUsers;
 import model.response.GetUserDetails;
 import model.response.UpdateAccountDetailsResponse;
 import org.testng.Assert;
@@ -203,5 +204,42 @@ public class ApiTests extends ApiClient {
         Assert.assertNotNull(getUserDetailsList.get(1));
     }
 
+    @Test()
+    public void test_Get_All_Users() throws Exception {
+
+        String firstName = "abc";
+        String lastName = "xyz";
+        double mobileNumber = 9765148726l;
+        double birthDate = 582012328000l;
+        String address = "#123, ABC, Mumbai";
+        String emailId = "patil.bmsce@gmail.com";
+        Gender gender = Gender.FEMALE;
+
+        // Create request body
+        CreateAccountRequest createAccountRequest = new CreateAccountRequest();
+        createAccountRequest.setFirstName(firstName);
+        createAccountRequest.setLastName(lastName);
+        createAccountRequest.setMobile(mobileNumber);
+        createAccountRequest.setDateOfBirth(birthDate);
+        createAccountRequest.setAddress(address);
+        createAccountRequest.setEmailId(emailId);
+        createAccountRequest.setGender(gender);
+
+        // Make rest call to create account
+        Response createResponse = createAccount(createAccountRequest);
+        Assert.assertEquals(createResponse.getStatusCode(), 201);
+
+        int pageNo = 1;
+        int pageSize = 10;
+
+        // Rest call to get all the Users
+        Response getUsers = getAllUsers(pageNo, pageSize);
+        Assert.assertEquals(getUsers.getStatusCode(), 200);
+        GetAllUsers getAllUsers = new ObjectMapper().readValue(getUsers.getResponseBody(), GetAllUsers.class);
+
+        // Validate response
+        Assert.assertNotNull(getAllUsers.getTotal());
+        Assert.assertEquals(getAllUsers.getPageNo(), pageNo);
+    }
 
 }
