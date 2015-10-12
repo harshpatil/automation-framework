@@ -23,7 +23,7 @@ public class ApiClient extends Setup {
 
     public Response createAccount(CreateAccountRequest createAccountRequest) throws Exception {
 
-        String url = "http://localhost:80/socialNetwork/createAccount";
+        String url = "http://localhost:8888/socialNetwork/createAccount";
         HashMap<String, String> headers = HeaderClass.defaultHeader();
         String body = objectMapper.writeValueAsString(createAccountRequest);
         System.out.println("Request Body ::: "+ body);
@@ -33,7 +33,7 @@ public class ApiClient extends Setup {
 
     public Response getUserDetails(String userId) throws Exception {
 
-        String url = "http://localhost:80/socialNetwork/userId/"+ userId;
+        String url = "http://localhost:8888/socialNetwork/userId/"+ userId;
         HashMap<String, String> headers = HeaderClass.defaultHeader();
         Response response = restTestClient.getMethod(url);
         return response;
@@ -41,7 +41,7 @@ public class ApiClient extends Setup {
 
     public Response updateAccountDetails(String userId, UpdateAccountDetailRequest updateAccountDetailRequest) throws Exception {
 
-        String url = "http://localhost:80/socialNetwork/userId/"+ userId + "/updateAccount";
+        String url = "http://localhost:8888/socialNetwork/userId/"+ userId + "/updateAccount";
         HashMap<String, String> headers = HeaderClass.defaultHeader();
         String body = objectMapper.writeValueAsString(updateAccountDetailRequest);
         System.out.println("Request Body ::: "+ body);
@@ -51,7 +51,7 @@ public class ApiClient extends Setup {
 
     public Response getUsersList() throws Exception {
 
-        String url = "http://localhost:80/socialNetwork/users";
+        String url = "http://localhost:8888/socialNetwork/users";
         HashMap<String, String> headers = HeaderClass.defaultHeader();
         Response response = restTestClient.getMethod(url);
         return response;
@@ -59,7 +59,7 @@ public class ApiClient extends Setup {
 
     public Response getAllUsers(int pageNo, int pageSize) throws Exception {
 
-        String url = "http://localhost:80/socialNetwork/allusers?pageNo=" + pageNo + "&pageSize=" + pageSize;
+        String url = "http://localhost:8888/socialNetwork/allusers?pageNo=" + pageNo + "&pageSize=" + pageSize;
         HashMap<String, String> headers = HeaderClass.defaultHeader();
         Response response = restTestClient.getMethod(url);
         return response;
